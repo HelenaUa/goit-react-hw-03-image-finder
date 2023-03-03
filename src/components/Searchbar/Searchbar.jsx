@@ -12,7 +12,7 @@ export const Searchbar = () => {
        <SearchFormInput
         type="text"
         autocomplete="off"
-        // autofocus
+        autofocus
         placeholder="Search images and photos"
         />
         </SearchForm>
