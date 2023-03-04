@@ -2,10 +2,15 @@
 import { ImageGalleryItemLi, ImageGalleryItemImage } from "./ImageGalleryItem.styled";
 
 
-export const ImageGalleryItem = () => {
+export const ImageGalleryItem = ({ image, openModal }) => {
+    const { webformatURL, largeImageURL, tags } = image;
     return (
         <ImageGalleryItemLi>
-           <ImageGalleryItemImage src="" alt="" />
+            <ImageGalleryItemImage
+                src={webformatURL}
+                alt={tags}
+                data-large={largeImageURL}
+                onClick={openModal}/>
         </ImageGalleryItemLi>
     )
 }
