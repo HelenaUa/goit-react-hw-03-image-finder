@@ -15,12 +15,13 @@ export class App extends Component {
     name: '',
     page: 1,
     images: null,
-    hits: null,
+    totalHits: null,
     loading: false,
     showModal: false,
     currentLargeUrl: '',
     currentImageTags: '',
-
+     error: null,
+     imagesOnPage: 0,
   };
 
   // componentDidMount() {
@@ -32,21 +33,36 @@ export class App extends Component {
   //     .finally(() => this.setState({loading: false}));
   // };
 
-  
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.name !== this.state.name) {
+  //     this.setState({ loading: true });
+
+  //     fetchImages(this.state.name).then(res => res.json())
+  //       .then(images => this.setState({ images: images.hits }))
+  //       .catch(error => { console.log('error :>> ', error) })
+  //       .finally(() => this.setState({ loading: false }));
+  //   }
+
+  // };
+
+
+
+
 
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.name !== this.state.name) {
+    if (this.state.name !== prevState.name) {
       this.setState({ loading: true });
 
       fetchImages(this.state.name, this.state.page).then(({ hits, totalHits }) => {
         if (hits.length === 0) {
-          this.setState({ images: null, totalHits: 0 });
+          this.setState({ images: null, imagesOnPage: 0, totalHits: 0 });
           alert('There is no image with name');
           return;
         }
         const arrayOfImages = this.createArrayOfImages(hits);
-        this.setState({ images: arrayOfImages, totalHits });
+        // console.log(arrayOfImages);
+        this.setState({ images: arrayOfImages, totalHits, imagesOnPage: hits.length, });
       }).catch((error) => {
         this.setState({ error });
         alert('Sorry, something went wrong. Please try again later.')
@@ -64,7 +80,7 @@ export class App extends Component {
     return arrayOfImages;
   };
 
-  onFormSubmit = (data) => {
+  onFormSubmit = data => {
     this.setState({ name: data, page: 1 });
   };
 
@@ -83,6 +99,31 @@ export class App extends Component {
   };
 
 
+
+
+
+
+
+
+
+  // onFormSubmit = data => {
+  //   this.setState({ name: data, page: 1 });
+  // };
+
+  // openModal = (event) => {
+  //   const currentLargeUrl = event.target.dataset.large;
+  //   const currentImageTags = event.target.alt;
+
+  //   this.setState({ currentLargeUrl, currentImageTags });
+  //   this.toggleModal();
+  // };
+
+  // toggleModal = () => {
+  //   this.setState(({ showModal }) => ({
+  //     showModal: !showModal,
+  //   }));
+  // };
+
   render() {
 
     return (
@@ -91,7 +132,7 @@ export class App extends Component {
 
         <Searchbar onSubmit={this.onFormSubmit}/>
         {this.state.loading && <Loader />}
-        {this.state.data && <ImageGallery images={this.state.images} openModal={this.openModal} />}
+        {this.state.images && <ImageGallery images={this.state.images} openModal={this.openModal} />}
         <Button />
         {/* <Modal /> */}
       

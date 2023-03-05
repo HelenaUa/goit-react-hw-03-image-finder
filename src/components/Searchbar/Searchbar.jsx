@@ -10,7 +10,7 @@ export class Searchbar extends Component {
     };
 
     handleChange = (event) => {
-        this.setState({ name: event.currentTarget.value.toLowerCase() });
+        this.setState({ name: event.target.value.toLowerCase() });
      };
 
     formSubmit = (event) => {
@@ -36,7 +36,7 @@ export class Searchbar extends Component {
        <SearchFormInput
         type="text"
         autocomplete="off"
-        autofocus
+        // autofocus
         placeholder="Search images and photos"
         value={this.state.name}
         onChange={this.handleChange}

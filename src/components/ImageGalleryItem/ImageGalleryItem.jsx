@@ -4,6 +4,7 @@ import { ImageGalleryItemLi, ImageGalleryItemImage } from "./ImageGalleryItem.st
 
 export const ImageGalleryItem = ({ image, openModal }) => {
     const { webformatURL, largeImageURL, tags } = image;
+    
     return (
         <ImageGalleryItemLi>
             <ImageGalleryItemImage
@@ -14,3 +15,5 @@ export const ImageGalleryItem = ({ image, openModal }) => {
         </ImageGalleryItemLi>
     )
 }
+
+// console.log(ImageGalleryItem());
