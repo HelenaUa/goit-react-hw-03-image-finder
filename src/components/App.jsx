@@ -6,6 +6,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 // import { Modal } from './Modal/Modal';
 import { Loader } from './Loader/Loader';
+import fetchImages from 'api/fetch';
 
 
 export class App extends Component {
@@ -13,7 +14,7 @@ export class App extends Component {
   state = {
     name: '',
     page: 1,
-    data: null,
+    images: null,
     hits: null,
     loading: false,
     showModal: false,
@@ -31,26 +32,40 @@ export class App extends Component {
   //     .finally(() => this.setState({loading: false}));
   // };
 
+  
+
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.name !== this.state.name) {
       this.setState({ loading: true });
-    const KEY = "32997902-3b59b8944b64f8408d8a5fafd";
-    const BASE_URL = "https://pixabay.com/api/";
-      fetch(`${BASE_URL}?key=${KEY}&q=${this.state.name}&image_type=photo&orientation=horizontal&safesearch=true&per_page=12&page=${this.state.page}`)
-      .then(res => res.json())
-      .then(hits => this.setState({ hits }))
-      .finally(() => this.setState({loading: false}));
+
+      fetchImages(this.state.name, this.state.page).then(({ hits, totalHits }) => {
+        if (hits.length === 0) {
+          this.setState({ images: null, totalHits: 0 });
+          alert('There is no image with name');
+          return;
+        }
+        const arrayOfImages = this.createArrayOfImages(hits);
+        this.setState({ images: arrayOfImages, totalHits });
+      }).catch((error) => {
+        this.setState({ error });
+        alert('Sorry, something went wrong. Please try again later.')
+     }).finally(() => this.setState({loading: false}));
     }
 
   };
 
-
-  // onFormSubmit = (name) => {
-  //   this.setState({ name });
-  // };
+  createArrayOfImages = data => {
+    const arrayOfImages = data.map(element => ({
+      tags: element.tags,
+      webformatURL: element.webformatURL,
+      largeImageURL: element.largeImageURL,
+    }));
+    return arrayOfImages;
+  };
 
   onFormSubmit = (data) => {
-    this.setState({ name: data.name });
+    this.setState({ name: data, page: 1 });
   };
 
   openModal = (event) => {
@@ -76,7 +91,7 @@ export class App extends Component {
 
         <Searchbar onSubmit={this.onFormSubmit}/>
         {this.state.loading && <Loader />}
-        {this.state.data && <ImageGallery images={this.state.data} openModal={this.openModal} />}
+        {this.state.data && <ImageGallery images={this.state.images} openModal={this.openModal} />}
         <Button />
         {/* <Modal /> */}
       
