@@ -9,9 +9,14 @@ export class Searchbar extends Component {
         name: '',
     };
 
-    handleChange = (event) => {
-        this.setState({ name: event.target.value.toLowerCase() });
-     };
+    handleChacge = (event) => {
+        const { name, value } = event.currentTarget;
+        this.setState({ [name]: value })
+    };
+
+    // handleChange = (event) => {
+    //     this.setState({ name: event.target.value.toLowerCase() });
+    //  };
 
     formSubmit = (event) => {
         event.preventDefault();
@@ -21,7 +26,7 @@ export class Searchbar extends Component {
             return;
         };
 
-        this.props.onSubmit(this.state.name);
+        this.props.onSubmit(this.state);
         this.setState({ name: '' });
     };
 
@@ -35,6 +40,7 @@ export class Searchbar extends Component {
 
        <SearchFormInput
         type="text"
+        // name="name"
         autocomplete="off"
         // autofocus
         placeholder="Search images and photos"
