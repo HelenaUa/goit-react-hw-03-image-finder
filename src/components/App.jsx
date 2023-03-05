@@ -125,7 +125,7 @@ export class App extends Component {
 
 
   onFormSubmit = (data) => {
-    this.setState({name: data.name})
+    this.setState({name: data})
   }
 
   toggleModal = () =>

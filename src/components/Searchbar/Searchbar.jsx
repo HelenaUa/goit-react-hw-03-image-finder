@@ -14,7 +14,7 @@ export class Searchbar extends Component {
 //         this.setState({ [name]: value })
 //     };
 
-    handleChacge = ({target: {value}}) => {
+    handleChange = ({target: {value}}) => {
         this.setState({ name: value });
     };
 
