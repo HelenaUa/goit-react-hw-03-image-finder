@@ -9,9 +9,13 @@ export class Searchbar extends Component {
         name: '',
     };
 
-    handleChacge = (event) => {
-        const { name, value } = event.currentTarget;
-        this.setState({ [name]: value })
+// handleChacge = (event) => {
+//         const { name, value } = event.currentTarget;
+//         this.setState({ [name]: value })
+//     };
+
+    handleChacge = ({target: {value}}) => {
+        this.setState({ name: value });
     };
 
     // handleChange = (event) => {
@@ -26,7 +30,7 @@ export class Searchbar extends Component {
             return;
         };
 
-        this.props.onSubmit(this.state);
+        this.props.onSubmit(this.state.value);
         this.setState({ name: '' });
     };
 
