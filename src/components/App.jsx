@@ -13,7 +13,7 @@ export class App extends Component {
 
   state = {
     name: '',
-    data: null,
+    data: [],
     showModal: false,
     largeUrl: null,
     alt: null,
@@ -112,14 +112,31 @@ export class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.perPage !== prevState.perPage) {
-    this.setState({ loading: true });
-      fetchImages();
-      this.setState({ loading: false });  
+      this.setState({ loading: true });
+      
+      fetchImages(this.state.name, this.state.perPage)
+        .then(data => {this.setState({ data: [...this.state.data, ...data.hits] });
+      }).catch(error => {console.log('error :>> ', error)})
+        .finally(() => {
+          // this.setState({ buttonVisial: true });
+          this.setState({ loading: false });
+        });
+      // this.setState({ loading: false });  
+
     }
     
     if (this.state.name !== prevState.name) {
-    this.setState({perPage: 12})
-    fetchImages();
+      this.setState({ perPage: 12 });
+      this.setState({ loading: true });
+
+      fetchImages(this.state.name, this.state.perPage)
+        .then(dataarray => {this.setState({ data: [...this.state.data, ...dataarray.hits] });
+        }).catch(error => {console.log('error :>> ', error)})
+        .finally(() => {
+          // this.setState({ buttonVisial: true });
+          this.setState({ loading: false });
+        });
+      
     } 
 }
 
@@ -140,6 +157,13 @@ export class App extends Component {
       alt: dataFind.tags,
   })
   }
+
+  loadMoreClick = (data) => {
+    this.setState(prevState => ({
+      perPage: prevState.perPage + Number(data.perPage)
+    }))
+  }
+
 
   // openModal = (event) => {
   //   const currentLargeUrl = event.target.dataset.large;
@@ -164,7 +188,7 @@ export class App extends Component {
         <Searchbar onSubmit={this.onFormSubmit}/>
         {this.state.loading && <Loader />}
         <ImageGallery data={this.state.data} openModal={this.openModal} toggleModal={() => { this.toggleModal() }}/>
-        <Button />
+        {this.state.data !== null && <Button click={this.loadMoreClick} />}
         {/* <Modal /> */}
       
     </AppStyled>
@@ -173,6 +197,6 @@ export class App extends Component {
   
 };
 
-//  <ImageGallary data={this.state.data} toggleModal={() => { this.toggleModal() }} modalItems={this.modalItems} />
+
 
 //  {this.state.images && <ImageGallery images={this.state.images} openModal={this.openModal} />}
