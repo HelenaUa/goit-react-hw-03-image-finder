@@ -1,19 +1,20 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ImageGalleryUl } from './ImageGallery.styled';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 
+
 export class ImageGallery extends Component {
-    state = {
-        data: [],
-        name: '' 
-    }
+  state = {
+    data: [],
+    name: ''
+  };
     
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
       this.setState({data: this.props.data})
     }
-  }
+  };
   
   galleryItemClick = (event) => {
     if (event.target.nodeName !== 'IMG') {
@@ -22,7 +23,7 @@ export class ImageGallery extends Component {
     const dataFind = this.state.data.find(items => items.id === Number(event.target.id))
     this.props.modalItems(dataFind);
     this.props.toggleModal();
-    }
+  };
     
     render() {
         return (
@@ -33,16 +34,10 @@ export class ImageGallery extends Component {
             </div>   
         )
     }
+};
+
+ImageGallery.propTypes = {
+  onClick: PropTypes.func,
 }
 
 
-// export const ImageGallery = ({images, openModal}) => {
-//     return (
-//         <ImageGalleryUl>
-//             {images.map((image, idx ) => (<ImageGalleryItem key={idx} image={image} openModal={openModal} />))}
-//            {/* <!-- Набор <li> с изображениями --> */}
-//         </ImageGalleryUl>
-//     )
-// }
-
-// console.log(ImageGallery());

@@ -4,7 +4,7 @@ import { AppStyled } from './App.styled';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
-// import { Modal } from './Modal/Modal';
+import { Modal } from './Modal/Modal';
 import { Loader } from './Loader/Loader';
 import fetchImages from 'api/fetch';
 
@@ -19,96 +19,9 @@ export class App extends Component {
     alt: null,
     loading: false,
     perPage: 12,
-    page: 1
-    // name: '',
-    // page: 1,
-    // images: null,
-    // totalHits: null,
-    // loading: false,
-    // showModal: false,
-    // currentLargeUrl: '',
-    // currentImageTags: '',
-    //  error: null,
-    //  imagesOnPage: 0,
+    page: 1,
+    buttonVisial: false,
   };
-
-  // componentDidMount() {
-  //   this.setState({ loading: true });
-
-  //   fetch(`${BASE_URL}?key=${KEY}&q=${this.state.name}&image_type=photo&orientation=horizontal&safesearch=true&per_page=12&page=${this.state.page}`)
-  //     .then(res => res.json())
-  //     .then(hits => this.setState({ hits }))
-  //     .finally(() => this.setState({loading: false}));
-  // };
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.name !== this.state.name) {
-  //     this.setState({ loading: true });
-
-  //     fetchImages(this.state.name).then(res => res.json())
-  //       .then(images => this.setState({ images: images.hits }))
-  //       .catch(error => { console.log('error :>> ', error) })
-  //       .finally(() => this.setState({ loading: false }));
-  //   }
-
-  // };
-
-
-
-
-
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.name !== prevState.name) {
-  //     this.setState({ loading: true });
-
-  //     fetchImages(this.state.name, this.state.page).then(({ hits, totalHits }) => {
-  //       if (hits.length === 0) {
-  //         this.setState({ images: null, imagesOnPage: 0, totalHits: 0 });
-  //         alert('There is no image with name');
-  //         return;
-  //       }
-  //       const arrayOfImages = this.createArrayOfImages(hits);
-  //       // console.log(arrayOfImages);
-  //       this.setState({ images: arrayOfImages, totalHits, imagesOnPage: hits.length, });
-  //     }).catch((error) => {
-  //       this.setState({ error });
-  //       alert('Sorry, something went wrong. Please try again later.')
-  //    }).finally(() => this.setState({loading: false}));
-  //   }
-
-  // };
-
-  // createArrayOfImages = data => {
-  //   const arrayOfImages = data.map(element => ({
-  //     tags: element.tags,
-  //     webformatURL: element.webformatURL,
-  //     largeImageURL: element.largeImageURL,
-  //   }));
-  //   return arrayOfImages;
-  // };
-
-  // onFormSubmit = data => {
-  //   this.setState({ name: data, page: 1 });
-  // };
-
-  // openModal = (event) => {
-  //   const currentLargeUrl = event.target.dataset.large;
-  //   const currentImageTags = event.target.alt;
-
-  //   this.setState({ currentLargeUrl, currentImageTags });
-  //   this.toggleModal();
-  // };
-
-  // toggleModal = () => {
-  //   this.setState(({ showModal }) => ({
-  //     showModal: !showModal,
-  //   }));
-  // };
-
-
-
-
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.perPage !== prevState.perPage) {
@@ -122,7 +35,6 @@ export class App extends Component {
           this.setState({ loading: false });
         });
       // this.setState({ loading: false });  
-
     }
     
     if (this.state.name !== prevState.name) {
@@ -133,13 +45,11 @@ export class App extends Component {
         .then(dataarray => {this.setState({ data: [...this.state.data, ...dataarray.hits] });
         }).catch(error => {console.log('error :>> ', error)})
         .finally(() => {
-          // this.setState({ buttonVisial: true });
+          this.setState({ buttonVisial: true });
           this.setState({ loading: false });
         });
-      
     } 
 }
-
 
   onFormSubmit = (data) => {
     this.setState({name: data})
@@ -150,34 +60,17 @@ export class App extends Component {
     showModal: !showModal
   }))
   
-
-  openModal = (dataFind) => {
+  modalItems = (dataFind) => {
     this.setState({
       largeUrl: dataFind.largeImageURL,
       alt: dataFind.tags,
   })
   }
 
-  loadMoreClick = (data) => {
-    this.setState(prevState => ({
-      perPage: prevState.perPage + Number(data.perPage)
-    }))
-  }
-
-
-  // openModal = (event) => {
-  //   const currentLargeUrl = event.target.dataset.large;
-  //   const currentImageTags = event.target.alt;
-
-  //   this.setState({ currentLargeUrl, currentImageTags });
-  //   this.toggleModal();
-  // };
-
-  // toggleModal = () => {
-  //   this.setState(({ showModal }) => ({
-  //     showModal: !showModal,
-  //   }));
-  // };
+  loadMoreClick = () => {
+    this.setState(prevState => ({  perPage: prevState.perPage + 1 }));
+  };
+  
 
   render() {
 
@@ -187,9 +80,9 @@ export class App extends Component {
 
         <Searchbar onSubmit={this.onFormSubmit}/>
         {this.state.loading && <Loader />}
-        <ImageGallery data={this.state.data} openModal={this.openModal} toggleModal={() => { this.toggleModal() }}/>
-        {this.state.data !== null && <Button click={this.loadMoreClick} />}
-        {/* <Modal /> */}
+        <ImageGallery data={this.state.data} modalItems={this.modalItems} toggleModal={() => { this.toggleModal() }}/>
+        {(this.state.buttonVisial && (this.state.data.length>0)) && <Button click={this.loadMoreClick} />}
+        {this.state.showModal && <Modal onClick={()=> {this.toggleModal()}} src={this.state.largeUrl} alt={this.state.alt} />}
       
     </AppStyled>
   );
@@ -197,6 +90,3 @@ export class App extends Component {
   
 };
 
-
-
-//  {this.state.images && <ImageGallery images={this.state.images} openModal={this.openModal} />}

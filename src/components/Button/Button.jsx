@@ -1,8 +1,8 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ButtonLoad } from "./Button.styled";
 
-export class Button extends Component() {
+export class Button extends Component {
     state = {
        perPage: 12,
     };
@@ -16,5 +16,8 @@ export class Button extends Component() {
         <ButtonLoad type="button" onClick={this.onClick}>Load more</ButtonLoad>
     )
     }
-    
+}
+
+Button.propTypes = {
+    onClick: PropTypes.func,
 }

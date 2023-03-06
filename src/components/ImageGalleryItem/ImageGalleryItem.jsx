@@ -1,5 +1,6 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { GalleryList, GalleryImage} from "./ImageGalleryItem.styled";
+
 
 export const ImageGalleryItem = ({items}) => {
     return (
@@ -15,18 +16,9 @@ export const ImageGalleryItem = ({items}) => {
 )
 }
 
-// export const ImageGalleryItem = ({ image, openModal }) => {
-//     const { webformatURL, largeImageURL, tags } = image;
-    
-//     return (
-//         <ImageGalleryItemLi>
-//             <ImageGalleryItemImage
-//                 src={image.webformatURL}
-//                 alt={image.tags}
-//                 data-large={image.largeImageURL}
-//                 onClick={openModal}/>
-//         </ImageGalleryItemLi>
-//     )
-// }
+ImageGalleryItem.propTypes = {
+    items: PropTypes.arrayOf(PropTypes.object),
+}
 
-// console.log(ImageGalleryItem());
+
+

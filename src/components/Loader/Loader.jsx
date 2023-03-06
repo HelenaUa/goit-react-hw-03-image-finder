@@ -15,7 +15,6 @@ export const Loader = () => {
            wrapperClass=""
            visible={true}
         />
-        </div>
-      
+        </div> 
     )
 }

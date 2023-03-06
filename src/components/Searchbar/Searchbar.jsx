@@ -9,18 +9,10 @@ export class Searchbar extends Component {
         name: '',
     };
 
-// handleChacge = (event) => {
-//         const { name, value } = event.currentTarget;
-//         this.setState({ [name]: value })
-//     };
 
     handleChange = ({target: {value}}) => {
         this.setState({ name: value });
     };
-
-    // handleChange = (event) => {
-    //     this.setState({ name: event.target.value.toLowerCase() });
-    //  };
 
     formSubmit = (event) => {
         event.preventDefault();
